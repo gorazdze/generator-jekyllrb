@@ -326,11 +326,6 @@ Generator.prototype.askForJekyll = function askForJekyll() {
     choices: ['redcarpet', 'maruku', 'rdiscount', 'kramdown']
   },
   {
-    name: 'jekPyg',
-    type: 'confirm',
-    message: 'Use the Pygments code highlighting library?'
-  },
-  {
     name: 'jekPage',
     message: 'Number of posts to show on the home page',
     default: 'all',
@@ -351,7 +346,6 @@ Generator.prototype.askForJekyll = function askForJekyll() {
   this.prompt(prompts, function (props) {
 
     setPromptDefaults(prompts, props);
-    this.jekPyg      = props.jekPyg;
     this.jekMkd      = props.jekMkd;
     this.jekPost     = props.jekPost;
     this.jekDescript = props.jekDescript;
@@ -516,14 +510,6 @@ Generator.prototype.templates = function templates() {
 
       cb();
     }.bind(this));
-  }
-};
-
-Generator.prototype.pygments = function pygments() {
-  // Pygments styles
-  if (this.jekPyg) {
-    // BROKEN.
-    // this.copy(path.join(this.jekyllTmp, 'css/syntax.css'), path.join(this.srcDir, this.cssDir, 'syntax.css'));
   }
 };
 
