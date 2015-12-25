@@ -21,6 +21,7 @@ module.exports = function (grunt) {
       app: '<%= srcDir %>',
       dist: 'dist'
     },
+
     watch: {<% if (cssPre === 'sass' || cssPre === 'compass' ) { %>
       <%= cssPre %>: {
         files: ['<%%= yeoman.app %>/<%= cssPreDir %>/**/*.{scss,sass}'],
@@ -46,6 +47,7 @@ module.exports = function (grunt) {
         tasks: ['jekyll:server']
       }
     },
+
     browserSync: {
       server: {
         bsFiles: {
@@ -97,6 +99,7 @@ module.exports = function (grunt) {
         }
       }
     },
+
     clean: {
       dist: {
         files: [{
@@ -115,6 +118,7 @@ module.exports = function (grunt) {
         '.jekyll'
       ]
     },<% if (cssPre === 'sass') { %>
+
     sass: {
       options: {
         debugInfo: false,
@@ -144,6 +148,7 @@ module.exports = function (grunt) {
         }]
       }
     },<% } %><% if (cssPre === 'compass') { %>
+
     compass: {
       options: {
         // If you're using global Sass gems, require them here.
@@ -170,6 +175,7 @@ module.exports = function (grunt) {
         }
       }
     },<% } %><% if (autoPre) { %>
+
     autoprefixer: {
       options: {
         browsers: ['last 2 versions']
@@ -181,6 +187,7 @@ module.exports = function (grunt) {
         dest: '.tmp'
       }
     },<% } %><% if (jsPre === 'coffeescript') { %>
+
     coffee: {
       dist: {
         files: [{
@@ -201,6 +208,7 @@ module.exports = function (grunt) {
         }]
       }
     },<% } %>
+
     jekyll: {
       options: {
         config: '_config.yml,_config.build.yml',
@@ -223,12 +231,14 @@ module.exports = function (grunt) {
         }
       }
     },
+
     useminPrepare: {
       options: {
         dest: '<%%= yeoman.dist %>'
       },
       html: '<%%= yeoman.dist %>/index.html'
     },
+
     usemin: {
       options: {
         assetsDirs: ['<%%= yeoman.dist %>', '<%%= yeoman.dist %>/<%= imgDir %>']
@@ -236,6 +246,7 @@ module.exports = function (grunt) {
       html: ['<%%= yeoman.dist %>/**/*.html'],
       css: ['<%%= yeoman.dist %>/<%= cssDir %>/**/*.css']
     },
+
     htmlmin: {
       dist: {
         options: {
@@ -252,10 +263,7 @@ module.exports = function (grunt) {
         }]
       }
     },
-    // Usemin adds files to concat
-    concat: {},
-    // Usemin adds files to uglify
-    uglify: {},
+
     // Usemin adds files to cssmin
     cssmin: {
       dist: {
@@ -264,6 +272,7 @@ module.exports = function (grunt) {
         }
       }
     },
+
     imagemin: {
       dist: {
         options: {
@@ -277,6 +286,7 @@ module.exports = function (grunt) {
         }]
       }
     },
+
     svgmin: {
       dist: {
         files: [{
@@ -287,6 +297,7 @@ module.exports = function (grunt) {
         }]
       }
     },
+
     copy: {
       dist: {
         files: [{
@@ -320,6 +331,7 @@ module.exports = function (grunt) {
         }]
       }<% } %>
     },
+
     filerev: {
       options: {
         length: 4
@@ -335,6 +347,7 @@ module.exports = function (grunt) {
         }]
       }
     },<% if (deploy) { %>
+
     buildcontrol: {
       dist: {
         options: {
@@ -345,6 +358,7 @@ module.exports = function (grunt) {
         }
       }
     },<% } %><% if (jsPre === 'coffeescript') { %>
+
     coffeelint: {
       options: {
         'max_line_length': {
@@ -353,6 +367,7 @@ module.exports = function (grunt) {
       },
       check: ['<%%= yeoman.app %>/<%= jsPreDir %>/*.coffee']
     },<% } %>
+
     jshint: {
       options: {
         jshintrc: '.jshintrc',
@@ -364,6 +379,7 @@ module.exports = function (grunt) {
         'test/spec/**/*.js'
       ]
     },
+
     csslint: {
       options: {
         csslintrc: '.csslintrc'
@@ -374,13 +390,7 @@ module.exports = function (grunt) {
         ]
       }
     },
-    // https://github.com/robwierzbowski/generator-jekyllrb/issues/106
-    // scsslint: {
-    //   // See https://www.npmjs.org/package/grunt-scss-lint for options.
-    //   allFiles: [
-    //     '<%%= yeoman.app %>/<%= cssPreDir %>/**/*.scss'
-    //   ]
-    // },
+
     concurrent: {
       server: [<% if (cssPre === 'sass') { %>
         'sass:server',<% } %><% if (cssPre === 'compass') { %>
@@ -443,10 +453,8 @@ module.exports = function (grunt) {
     'jekyll:dist',
     'concurrent:dist',
     'useminPrepare',
-    'concat',
     'cssmin',<% if (autoPre) { %>
     'autoprefixer:dist',<% } %>
-    'uglify',
     'imagemin',
     'svgmin',
     'filerev',
