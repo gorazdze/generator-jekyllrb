@@ -30,6 +30,7 @@ var Generator = module.exports = function Generator(args, options) {
   yeoman.generators.Base.apply(this, arguments);
 
   // Get static info for templating
+  this.srcDir = 'src';
   this.jekyllTmp = path.join(process.cwd(), '.jekyll');
   this.appname = path.basename(process.cwd());
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
@@ -417,36 +418,36 @@ Generator.prototype.templates = function templates() {
   var formattedDate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
 
   // Scaffold Jekyll dirs
-  this.mkdir('app/_layouts');
-  this.mkdir('app/_posts');
-  this.mkdir('app/_includes');
-  this.mkdir('app/_plugins');
-  this.mkdir(path.join('app', this.cssDir));
-  this.mkdir(path.join('app', this.jsDir));
-  this.mkdir(path.join('app', this.imgDir));
-  this.mkdir(path.join('app', this.fontsDir));
+  this.mkdir(this.srcDir + '/_layouts');
+  this.mkdir(this.srcDir + '/_posts');
+  this.mkdir(this.srcDir + '/_includes');
+  this.mkdir(this.srcDir + '/_plugins');
+  this.mkdir(path.join(this.srcDir, this.cssDir));
+  this.mkdir(path.join(this.srcDir, this.jsDir));
+  this.mkdir(path.join(this.srcDir, this.imgDir));
+  this.mkdir(path.join(this.srcDir, this.fontsDir));
 
   // Jekyll config files
   this.copy('_config.build.yml', '_config.build.yml');
   this.template('_config.yml');
 
   // Project posts
-  this.copy(path.join(this.jekyllTmp, '_posts', formattedDate + '-welcome-to-jekyll.markdown'), path.join('app/_posts', formattedDate + '-welcome-to-jekyll.md'));
-  this.template('app/_posts/yo-jekyllrb.md', 'app/_posts/' + formattedDate + '-yo-jekyllrb.md');
+  this.copy(path.join(this.jekyllTmp, '_posts', formattedDate + '-welcome-to-jekyll.markdown'), path.join('src/_posts', formattedDate + '-welcome-to-jekyll.md'));
+  this.template('src/_posts/yo-jekyllrb.md', 'src/_posts/' + formattedDate + '-yo-jekyllrb.md');
 
   // Jekyll default template
   if (this.templateType === 'default') {
 
     // Default Jekyll files
-    this.copy(path.join(this.jekyllTmp, 'index.html'), 'app/index.html');
-    this.copy(path.join(this.jekyllTmp, '_layouts/post.html'), 'app/_layouts/post.html');
-    this.copy(path.join(this.jekyllTmp, 'css/main.scss'), path.join('app', this.cssDir, 'main.scss'));
+    this.copy(path.join(this.jekyllTmp, 'index.html'), this.srcDir + '/index.html');
+    this.copy(path.join(this.jekyllTmp, '_layouts/post.html'), this.srcDir + '/_layouts/post.html');
+    this.copy(path.join(this.jekyllTmp, 'css/main.scss'), path.join(this.srcDir, this.cssDir, 'main.scss'));
 
     // Jekyll files tailored for Yeoman
-    this.template('conditional/template-default/_layouts/default.html', 'app/_layouts/default.html');
+    // this.template('conditional/template-default/_layouts/default.html', this.srcDir + '/_layouts/default.html');
 
     // Empty file for Usemin defaults
-    this.write(path.join('app', this.jsDir, 'main.js'), '');
+    this.write(path.join(this.srcDir, this.jsDir, 'main.js'), '');
   }
 
   // HTML5 Boilerplate template
@@ -454,14 +455,14 @@ Generator.prototype.templates = function templates() {
     var cb = this.async();
 
     // H5BP files tailored for Yeoman and Jekyll
-    this.copy('conditional/template-H5BP/index.html', 'app/index.html');
-    this.copy('conditional/template-H5BP/_layouts/post.html', 'app/_layouts/post.html');
-    this.template('conditional/template-H5BP/_includes/scripts.html', 'app/_includes/scripts.html');
-    this.template('conditional/template-H5BP/_layouts/default.html', 'app/_layouts/default.html');
+    this.copy('conditional/template-H5BP/index.html', this.srcDir + '/index.html');
+    this.copy('conditional/template-H5BP/_layouts/post.html', this.srcDir + '/_layouts/post.html');
+    this.template('conditional/template-H5BP/_includes/scripts.html', this.srcDir + '/_includes/scripts.html');
+    this.template('conditional/template-H5BP/_layouts/default.html', this.srcDir + '/_layouts/default.html');
 
     // Google analytics include
     if (this.h5bpAnalytics) {
-      this.copy('conditional/template-H5BP/_includes/googleanalytics.html', 'app/_includes/googleanalytics.html');
+      this.copy('conditional/template-H5BP/_includes/googleanalytics.html', this.srcDir + '/_includes/googleanalytics.html');
     }
 
     // Pull H5BP in from Github
@@ -473,44 +474,44 @@ Generator.prototype.templates = function templates() {
       }
 
       // Always include files
-      remote.copy('.htaccess', 'app/.htaccess');
-      remote.copy('404.html', 'app/404.html');
-      remote.copy('crossdomain.xml', 'app/crossdomain.xml');
-      remote.copy('LICENSE.md', 'app/_h5bp-docs/LICENSE.md');
-      remote.copy('robots.txt', 'app/robots.txt');
-      remote.copy('humans.txt', 'app/humans.txt');
+      remote.copy('.htaccess', this.srcDir + '/.htaccess');
+      remote.copy('404.html', this.srcDir + '/404.html');
+      remote.copy('crossdomain.xml', this.srcDir + '/crossdomain.xml');
+      remote.copy('LICENSE.md', this.srcDir + '/_h5bp-docs/LICENSE.md');
+      remote.copy('robots.txt', this.srcDir + '/robots.txt');
+      remote.copy('humans.txt', this.srcDir + '/humans.txt');
 
       // CSS boilerplate
       if (this.h5bpCss) {
-        remote.copy('css/main.css', path.join('app', this.cssDir, 'main.css'));
+        remote.copy('css/main.css', path.join(this.srcDir, this.cssDir, 'main.css'));
       }
       else {
         // Empty file
-        this.write(path.join('app', this.cssDir, 'main.css'), '');
+        this.write(path.join(this.srcDir, this.cssDir, 'main.css'), '');
       }
 
       // Js boilerplate
       if (this.h5bpJs) {
-        remote.copy('js/main.js', path.join('app', this.jsDir, 'main.js'));
-        remote.copy('js/plugins.js', path.join('app', this.jsDir, 'plugins.js'));
+        remote.copy('js/main.js', path.join(this.srcDir, this.jsDir, 'main.js'));
+        remote.copy('js/plugins.js', path.join(this.srcDir, this.jsDir, 'plugins.js'));
       }
       else {
         // Empty file
-        this.write(path.join('app', this.jsDir, 'main.js'), '');
+        this.write(path.join(this.srcDir, this.jsDir, 'main.js'), '');
       }
 
       // Touch and favicon
       if (this.h5bpIco) {
-        remote.copy('apple-touch-icon-precomposed.png', 'app/apple-touch-icon-precomposed.png');
-        remote.copy('favicon.ico', 'app/favicon.ico');
+        remote.copy('apple-touch-icon-precomposed.png', this.srcDir + '/apple-touch-icon-precomposed.png');
+        remote.copy('favicon.ico', this.srcDir + '/favicon.ico');
       }
 
       // Docs
       if (this.h5bpDocs) {
-        remote.directory('doc', 'app/_h5bp-docs/code-docs');
-        remote.copy('CHANGELOG.md', 'app/_h5bp-docs/CHANGELOG.md');
-        remote.copy('CONTRIBUTING.md', 'app/_h5bp-docs/CONTRIBUTING.md');
-        remote.copy('README.md', 'app/_h5bp-docs/README.md');
+        remote.directory('doc', this.srcDir + '/_h5bp-docs/code-docs');
+        remote.copy('CHANGELOG.md', this.srcDir + '/_h5bp-docs/CHANGELOG.md');
+        remote.copy('CONTRIBUTING.md', this.srcDir + '/_h5bp-docs/CONTRIBUTING.md');
+        remote.copy('README.md', this.srcDir + '/_h5bp-docs/README.md');
       }
 
       cb();
@@ -522,29 +523,29 @@ Generator.prototype.pygments = function pygments() {
   // Pygments styles
   if (this.jekPyg) {
     // BROKEN.
-    // this.copy(path.join(this.jekyllTmp, 'css/syntax.css'), path.join('app', this.cssDir, 'syntax.css'));
+    // this.copy(path.join(this.jekyllTmp, 'css/syntax.css'), path.join(this.srcDir, this.cssDir, 'syntax.css'));
   }
 };
 
 Generator.prototype.cssPreprocessor = function cssPreprocessor() {
-  var files = globule.find('**/*.css', {srcBase: path.join('app', this.cssDir)});
+  var files = globule.find('**/*.css', {srcBase: path.join(this.srcDir, this.cssDir)});
   var cssDir = this.cssDir;
 
   if (this.cssPre) {
-    this.mkdir(path.join('app', this.cssPreDir));
-    this.template('conditional/css-pre/readme.md', path.join('app', this.cssPreDir, 'readme.md'));
+    this.mkdir(path.join(this.srcDir, this.cssPreDir));
+    this.template('conditional/css-pre/readme.md', path.join(this.srcDir, this.cssPreDir, 'readme.md'));
 
     // Copy CSS files to preprocessor files
     files.forEach(function (file) {
-      this.copy(path.join(process.cwd(), 'app', cssDir, file),
-                path.join('app', this.cssPreDir, file.replace(/\.css$/, '.scss')));
+      this.copy(path.join(process.cwd(), this.srcDir, cssDir, file),
+                path.join(this.srcDir, this.cssPreDir, file.replace(/\.css$/, '.scss')));
 
       // Wait until copy is completely finished and then delete files.
       this.conflicter.resolve(function (err) {
         if (err) {
           return this.emit('error', err);
         }
-        spawn('rm', [path.join('app', cssDir, file)], { stdio: 'inherit' });
+        spawn('rm', [path.join(this.srcDir, cssDir, file)], { stdio: 'inherit' });
       });
     }, this);
   }
@@ -552,11 +553,11 @@ Generator.prototype.cssPreprocessor = function cssPreprocessor() {
 
 Generator.prototype.jsPreprocessor = function jsPreprocessor() {
   if (this.jsPre) {
-    this.mkdir(path.join('app', this.jsPreDir));
+    this.mkdir(path.join(this.srcDir, this.jsPreDir));
   }
 
   if (this.jsPre === 'coffeescript') {
-    this.template('conditional/coffee/readme.md', path.join('app', this.jsPreDir, 'readme.md'));
+    this.template('conditional/coffee/readme.md', path.join(this.srcDir, this.jsPreDir, 'readme.md'));
   }
 };
 
